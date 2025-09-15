@@ -1,13 +1,16 @@
 package com.ninabornemann.spring_data_asterixapi.controller;
 
+import com.ninabornemann.spring_data_asterixapi.dto.CharacterDto;
 import com.ninabornemann.spring_data_asterixapi.repository.CharacterRepo;
 import com.ninabornemann.spring_data_asterixapi.model.Characters;
 import com.ninabornemann.spring_data_asterixapi.service.AsterixService;
+import com.ninabornemann.spring_data_asterixapi.service.IdService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -15,9 +18,11 @@ import java.util.Optional;
 public class AsterixController {
 
     private final AsterixService service;
+    private final IdService idService;
 
-    public AsterixController(CharacterRepo repo, AsterixService service) {
+    public AsterixController(CharacterRepo repo, AsterixService service, IdService idService) {
         this.service = service;
+        this.idService = idService;
     }
 
     @GetMapping
@@ -31,7 +36,7 @@ public class AsterixController {
     }
 
     @PostMapping
-    public Characters addCharacter(@RequestBody Characters value) {
+    public Characters addCharacter(@RequestBody CharacterDto value) {
         return service.addCharacter(value);
     }
 

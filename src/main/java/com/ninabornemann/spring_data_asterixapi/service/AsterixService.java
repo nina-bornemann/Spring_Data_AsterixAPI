@@ -1,5 +1,6 @@
 package com.ninabornemann.spring_data_asterixapi.service;
 
+import com.ninabornemann.spring_data_asterixapi.dto.CharacterDto;
 import com.ninabornemann.spring_data_asterixapi.model.Characters;
 import com.ninabornemann.spring_data_asterixapi.repository.CharacterRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +15,11 @@ import java.util.Optional;
 public class AsterixService {
 
     private final CharacterRepo repo;
+    private final IdService idService;
 
-    public AsterixService(CharacterRepo repo) {
+    public AsterixService(CharacterRepo repo, IdService idService) {
         this.repo = repo;
+        this.idService = idService;
     }
 
     public List<Characters> getCharacters() {
@@ -35,8 +38,9 @@ public class AsterixService {
         return characters;
     }
 
-    public Characters addCharacter(Characters value) {
-        return repo.insert(value);
+    public Characters addCharacter(CharacterDto value) {
+        Characters c = new Characters(idService.randomId(), value.getName(), value.getAge(), value.getProfession());
+        return repo.insert(c);
     }
 
     public Characters updateCharacter(Characters value) {
