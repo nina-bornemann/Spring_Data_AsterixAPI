@@ -1,28 +1,57 @@
 package com.ninabornemann.spring_data_asterixapi;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/asterix/characters")
 public class AsterixController {
 
+    private final CharacterRepo repo;
+
+    public AsterixController(CharacterRepo repo) {
+        this.repo = repo;
+    }
+
+
     @GetMapping
     public List<Characters> getCharacters() {
-        return List.of(
-                new Characters("1", "Asterix", 35, "Warrior"),
-                new Characters("2", "Obelix", 35, "Supplier"),
-                new Characters("3", "Miraculix", 60, "Druid"),
-                new Characters("4", "Majestix", 60, "Chief"),
-                new Characters("5", "Troubadix", 25, "Bard"),
-                new Characters("6", "Gutemine", 35, "Chiefs Wife"),
-                new Characters("7", "Idefix", 5, "Dog"),
-                new Characters("8", "Geriatrix", 70, "Retiree"),
-                new Characters("9", "Automatix", 35, "Smith"),
-                new Characters("10", "Grockelix", 35, "Fisherman")
-        );
+        return repo.findAll();
+    }
+
+    @GetMapping("/byProperty")
+    public List<Characters> getCharacterByProperty(@RequestParam Optional<String> namePrefix) {
+        log.info("our namePrefix is: " + namePrefix);
+        List<Characters> characters = new ArrayList<>();
+        List<Characters> all = repo.findAll();
+        for (Characters c : all) {
+            if (namePrefix.isPresent() && c.getName().startsWith(namePrefix.get())) {
+                characters.add(c);
+            }
+        }
+        return characters;
+    }
+
+    @PostMapping
+    public Characters addCharacter(@RequestBody Characters value) {
+        return repo.insert(value);
+    }
+
+    @PutMapping
+    public Characters updateCharacter(@RequestBody Characters value) {
+        if (value.getId() == null || value.getId().isEmpty()) {
+            throw new IllegalArgumentException("you must set an Id.");
+        }
+        return repo.save(value);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCharacterById(@PathVariable String id) {
+        repo.deleteById(id);
     }
 }
