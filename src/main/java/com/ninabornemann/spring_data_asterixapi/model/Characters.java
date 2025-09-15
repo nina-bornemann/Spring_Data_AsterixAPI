@@ -1,4 +1,4 @@
-package com.ninabornemann.spring_data_asterixapi;
+package com.ninabornemann.spring_data_asterixapi.model;
 
 import java.util.Objects;
 

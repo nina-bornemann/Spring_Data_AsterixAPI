@@ -1,12 +1,9 @@
 package com.ninabornemann.spring_data_asterixapi.service;
 
-import com.ninabornemann.spring_data_asterixapi.Characters;
+import com.ninabornemann.spring_data_asterixapi.model.Characters;
 import com.ninabornemann.spring_data_asterixapi.repository.CharacterRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
