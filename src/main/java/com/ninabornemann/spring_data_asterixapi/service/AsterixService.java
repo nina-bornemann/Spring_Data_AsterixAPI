@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -70,5 +71,16 @@ public class AsterixService {
         existing.setAge(value.getAge());
         existing.setProfession(value.getProfession());
         return repo.save(existing);
+    }
+
+    public Integer getAverageAgeByProfession(String profession) {
+        List<Characters> all = repo.findAll();
+        List<Characters> professionList = all.stream()
+                .filter(c -> Objects.equals(c.getProfession(), profession))
+                .toList();
+        int sum = professionList.stream()
+                .map(Characters::getAge)
+                .reduce(0, Integer::sum);
+        return sum / professionList.size();
     }
 }

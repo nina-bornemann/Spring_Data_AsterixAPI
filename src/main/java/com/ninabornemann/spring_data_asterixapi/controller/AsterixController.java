@@ -47,6 +47,11 @@ public class AsterixController {
         return service.getCharacterById(id);
     }
 
+    @GetMapping("/averageAge/{profession}")
+    public Integer getAverageAgeByProfession(@PathVariable String profession) {
+        return service.getAverageAgeByProfession(profession);
+    }
+
     @PostMapping
     public Characters addCharacter(@RequestBody CharacterDto value) {
         return service.addCharacter(value);
