@@ -8,6 +8,8 @@ public class Characters {
     private int age;
     private String profession;
 
+    public Characters() {}
+
     public Characters(String id, String name, int age, String profession) {
         this.id = id;
         this.name = name;

@@ -50,6 +50,11 @@ public class AsterixController {
         return service.updateCharacter(value);
     }
 
+    @PutMapping("/{id}")
+    public Characters updateCharacterById(@PathVariable String id, @RequestBody Characters value) {
+        return service.updateCharacterById(id, value);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteCharacterById(@PathVariable String id) {
         service.deleteCharacterById(id);

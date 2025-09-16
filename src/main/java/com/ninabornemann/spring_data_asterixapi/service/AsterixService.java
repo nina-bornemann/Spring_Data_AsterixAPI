@@ -4,7 +4,9 @@ import com.ninabornemann.spring_data_asterixapi.dto.CharacterDto;
 import com.ninabornemann.spring_data_asterixapi.model.Characters;
 import com.ninabornemann.spring_data_asterixapi.repository.CharacterRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,5 +58,13 @@ public class AsterixService {
 
     public Characters getCharacterById(String id) {
         return repo.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public Characters updateCharacterById(String id, Characters value) {
+        if (!repo.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Character with id " + id + " not found");
+        }
+        value.setId(id);
+        return updateCharacter(value);
     }
 }
