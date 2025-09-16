@@ -39,7 +39,106 @@ class AsterixControllerTest {
                                 "age": 25,
                                 "profession": "Scientist"
                             }
-                        ]"""
+                        ]
+                        """
+                ));
+    }
+
+    @Test
+    void getCharactersByName() throws Exception {
+        Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
+        Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
+        repo.save(c1);
+        repo.save(c2);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/byName?name=Pancake"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                        [
+                            {
+                              "id": "12345PC",
+                              "name": "Pancake",
+                              "age": 29,
+                              "profession": "Hacker"
+                            }
+                        ]
+                        """
+                ));
+    }
+
+    @Test
+    void getCharacterById() throws Exception {
+        Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
+        Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
+        repo.save(c1);
+        repo.save(c2);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/12345CC"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                            {
+                              "id": "12345CC",
+                              "name": "Cupcake",
+                              "age": 25,
+                              "profession": "Scientist"
+                            }
+                        """
+                ));
+    }
+
+    @Test
+    void getCharacterByAge_exactAge() throws Exception {
+        Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
+        Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
+        repo.save(c1);
+        repo.save(c2);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/byAge?exactAge=29"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                        [
+                            {
+                              "id": "12345PC",
+                              "name": "Pancake",
+                              "age": 29,
+                              "profession": "Hacker"
+                            }
+                        ]
+                        """
+                ));
+    }
+
+    @Test
+    void getCharacterByAge_minAndMaxAge() throws Exception {
+        Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
+        Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
+        Characters c3 = new Characters("12345LC", "Lemoncake", 35, "Baker");
+        repo.save(c1);
+        repo.save(c2);
+        repo.save(c3);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/byAge?minAge=28&&maxAge=36"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                        [
+                            {
+                              "id": "12345PC",
+                              "name": "Pancake",
+                              "age": 29,
+                              "profession": "Hacker"
+                            },
+                            {
+                              "id": "12345LC",
+                              "name": "Lemoncake",
+                              "age": 35,
+                              "profession": "Baker"
+                            }
+                        ]
+                        """
                 ));
     }
 
