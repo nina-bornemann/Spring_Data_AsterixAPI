@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,16 +29,26 @@ public class AsterixService {
         return repo.findAll();
     }
 
-    public List<Characters> getCharacterByProperty(Optional<String> namePrefix) {
-        log.info("our namePrefix is: " + namePrefix);
+    public List<Characters> getCharacterByName(Optional<String> name) {
+        log.info("our namePrefix is: " + name);
         List<Characters> characters = new ArrayList<>();
         List<Characters> all = repo.findAll();
         for (Characters c : all) {
-            if (namePrefix.isPresent() && c.getName().startsWith(namePrefix.get())) {
+            if (name.isPresent() && c.getName().startsWith(name.get())) {
                 characters.add(c);
             }
         }
         return characters;
+    }
+
+    public List<Characters> getCharacterByAge(Integer exactAge, Integer minAge, Integer maxAge) {
+        List<Characters> characters = new ArrayList<>();
+        List<Characters> all = repo.findAll();
+        return all.stream()
+                .filter(c -> exactAge == null || c.getAge() == exactAge)
+                .filter(c -> minAge == null || c.getAge() >= minAge)
+                .filter(c -> maxAge == null || c.getAge() <= maxAge)
+                .collect(Collectors.toList());
     }
 
     public Characters addCharacter(CharacterDto value) {

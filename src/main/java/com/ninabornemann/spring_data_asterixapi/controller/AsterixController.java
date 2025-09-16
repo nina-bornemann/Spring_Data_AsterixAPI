@@ -30,9 +30,16 @@ public class AsterixController {
         return service.getCharacters();
     }
 
-    @GetMapping("/byProperty")
-    public List<Characters> getCharacterByProperty(@RequestParam Optional<String> namePrefix) {
-        return service.getCharacterByProperty(namePrefix);
+    @GetMapping("/byName")
+    public List<Characters> getCharacterByName(@RequestParam Optional<String> name) {
+        return service.getCharacterByName(name);
+    }
+
+    @GetMapping("/byAge")
+    public List<Characters> getCharacterByAge(@RequestParam(required = false) Integer exactAge,
+                                              @RequestParam(required = false) Integer minAge,
+                                              @RequestParam(required = false) Integer maxAge) {
+        return service.getCharacterByAge(exactAge, minAge, maxAge);
     }
 
     @GetMapping("/{id}")
