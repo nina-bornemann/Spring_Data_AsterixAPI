@@ -63,7 +63,7 @@ public class AsterixController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCharacterById(@PathVariable String id) {
-        service.deleteCharacterById(id);
+    public boolean deleteCharacterById(@PathVariable String id) {
+        return service.deleteCharacterById(id);
     }
 }

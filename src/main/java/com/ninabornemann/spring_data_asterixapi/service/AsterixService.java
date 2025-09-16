@@ -57,8 +57,9 @@ public class AsterixService {
         return repo.insert(c);
     }
 
-    public void deleteCharacterById(String id) {
+    public boolean deleteCharacterById(String id) {
         repo.deleteById(id);
+        return repo.existsById(id);
     }
 
     public Characters getCharacterById(String id) {
