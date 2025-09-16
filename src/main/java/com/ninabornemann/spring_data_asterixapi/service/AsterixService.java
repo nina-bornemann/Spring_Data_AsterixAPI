@@ -53,4 +53,8 @@ public class AsterixService {
     public void deleteCharacterById(String id) {
         repo.deleteById(id);
     }
+
+    public Characters getCharacterById(String id) {
+        return repo.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
 }

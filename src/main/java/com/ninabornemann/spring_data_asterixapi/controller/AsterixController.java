@@ -35,6 +35,11 @@ public class AsterixController {
         return service.getCharacterByProperty(namePrefix);
     }
 
+    @GetMapping("/{id}")
+    public Characters getCharacterById(@PathVariable String id) {
+        return service.getCharacterById(id);
+    }
+
     @PostMapping
     public Characters addCharacter(@RequestBody CharacterDto value) {
         return service.addCharacter(value);
