@@ -45,13 +45,8 @@ public class AsterixController {
         return service.addCharacter(value);
     }
 
-    @PutMapping
-    public Characters updateCharacter(@RequestBody Characters value) {
-        return service.updateCharacter(value);
-    }
-
     @PutMapping("/{id}")
-    public Characters updateCharacterById(@PathVariable String id, @RequestBody Characters value) {
+    public Characters updateCharacterById(@PathVariable String id, @RequestBody CharacterDto value) {
         return service.updateCharacterById(id, value);
     }
 

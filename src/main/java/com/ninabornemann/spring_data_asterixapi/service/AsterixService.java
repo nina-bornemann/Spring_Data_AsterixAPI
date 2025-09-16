@@ -45,13 +45,6 @@ public class AsterixService {
         return repo.insert(c);
     }
 
-    public Characters updateCharacter(Characters value) {
-        if (value.getId() == null || value.getId().isEmpty()) {
-            throw new IllegalArgumentException("you must set an Id.");
-        }
-        return repo.save(value);
-    }
-
     public void deleteCharacterById(String id) {
         repo.deleteById(id);
     }
@@ -60,11 +53,11 @@ public class AsterixService {
         return repo.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    public Characters updateCharacterById(String id, Characters value) {
-        if (!repo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Character with id " + id + " not found");
-        }
-        value.setId(id);
-        return updateCharacter(value);
+    public Characters updateCharacterById(String id, CharacterDto value) {
+        Characters existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Character with id " + id + " not found"));
+        existing.setName(value.getName());
+        existing.setAge(value.getAge());
+        existing.setProfession(value.getProfession());
+        return repo.save(existing);
     }
 }
