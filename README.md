@@ -1,3 +1,5 @@
+[![.github/workflows/maven.yml](https://github.com/nina-bornemann/Spring_Data_AsterixAPI/actions/workflows/maven.yml/badge.svg)](https://github.com/nina-bornemann/Spring_Data_AsterixAPI/actions/workflows/maven.yml)
+
 ## Asterix Characters API
 
 A simple Spring Boot REST API to manage characters from the
