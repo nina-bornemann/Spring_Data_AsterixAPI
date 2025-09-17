@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +26,7 @@ class AsterixControllerTest {
     private CharacterRepo repo;
 
     @Test
+    @DirtiesContext
     void getAllCharacters() throws Exception {
         Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
         repo.save(c1);
@@ -45,6 +48,7 @@ class AsterixControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void getCharactersByName() throws Exception {
         Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
         Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
@@ -68,6 +72,7 @@ class AsterixControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void getCharacterById() throws Exception {
         Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
         Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
@@ -89,6 +94,7 @@ class AsterixControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void getCharacterByAge_exactAge() throws Exception {
         Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
         Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
@@ -112,6 +118,7 @@ class AsterixControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void getCharacterByAge_minAndMaxAge() throws Exception {
         Characters c1 = new Characters("12345CC", "Cupcake", 25, "Scientist");
         Characters c2 = new Characters("12345PC", "Pancake", 29, "Hacker");
@@ -142,4 +149,29 @@ class AsterixControllerTest {
                 ));
     }
 
+    @Test
+    @DirtiesContext
+    void addCharacter() throws Exception {
+       mockMvc.perform(MockMvcRequestBuilders.post("/asterix/characters")
+               .contentType(MediaType.APPLICATION_JSON).content(
+                       """
+                           {
+                            "name": "Pancake",
+                            "age": 29,
+                            "profession": "Hacker"
+                           }
+                       """
+               ))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.content().json(
+                       """
+                            {
+                                "name": "Pancake",
+                                "age": 29,
+                                "profession": "Hacker"
+                            }
+                       """
+               ))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty());
+    }
 }
